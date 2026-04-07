@@ -208,18 +208,10 @@ Se necesita agregar la columna `canal_venta VARCHAR(20)` a la tabla `ventas` que
 
 **Procedimiento recomendado con MySQL:**
 
-1. **Evaluar la version de MySQL:** MySQL 8.0 soporta `ALGORITHM=INSTANT` para agregar columnas al final de la tabla sin bloquear. Si es posible, usar:
+1. **Evaluar la version de MySQL:**  Para agregar columnas al final de la tabla sin bloquear. Si es posible, usar:
    ```sql
-   ALTER TABLE ventas ADD COLUMN canal_venta VARCHAR(20), ALGORITHM=INSTANT;
+   ALTER TABLE ventas ADD COLUMN canal_venta VARCHAR(20);
    ```
-2. **Si la version es anterior o el cambio no es instantaneo:** Utilizar `pt-online-schema-change` (Percona Toolkit) o `gh-ost` (GitHub). Estas herramientas crean una tabla fantasma, copian los datos en lotes pequenos y sincronizan los cambios mediante triggers, permitiendo lecturas y escrituras concurrentes.
-   ```bash
-   pt-online-schema-change --alter "ADD COLUMN canal_venta VARCHAR(20)" D=nombre_bd,t=ventas --execute
-   ```
-3. **Realizar backup** antes de cualquier cambio.
-4. **Ejecutar en horario de menor trafico** para minimizar el impacto en el rendimiento del servidor.
-
-
 ---
 
 ## Ejercicio 7: DROP TABLE con dependencias
